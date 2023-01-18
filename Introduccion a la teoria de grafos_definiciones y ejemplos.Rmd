@@ -1,0 +1,77 @@
+---
+Título: "Introducción a la teoría de grafos: definiciones y ejemplos"
+Autor: Luis Felipe Hernández Ramírez
+output: github_document
+---
+
+### Definición de grafo
+
+Un **grafo simple** consiste en un set finito y no vacio denominado V(G) de elementos llamados **vertices o nodos** y, un set finito E(G) de **aristas** que unen los pares no ordenados de V(G).
+
+```{r}
+#Importar librerias
+library(igraph)         # Biblioteca para análisis de redes.
+library(tidyverse)      # Colección de bibliotecas para manipulación de datos.
+library(viridis)        # Biblioteca con paletas de colores.
+```
+
+```{r}
+# Generamos una red aleatoria de 4 nodos no dirigida.
+# Para poder reproducirla, dado que tiene componentes aleatorios,
+# Fijamos la semilla del generador de números pseudoaleatorios.
+set.seed(22051996)
+g <- sample_gnp(4, 1, directed = FALSE, loops = FALSE)
+plot(g,
+     vertex.color="darkorchid",  # color de los nodos
+     vertex.size=20,             # tamaño de los nodos
+     edge.color="black")         # color de las aristas
+```
+
+Calcularemos el set de vertices **V(G)** y el set de aristas **V(E)** del grafo generado arriba, el cual sería considerado un **grafo simple**, en el cual por lo menos una arista esta uniendo un dado par de vertices.
+
+```{r}
+V(g) #Calcular nodos
+E(g) #Calcular aristas 
+```
+
+A continuación se presentara un **grafo general** o simplemente un **grafo**, dicho objeto permite la presencia de loops y aristas multiples. Un **loop** es aquella arista que conecta un nodo con si mismo. Las **aristas multiples** son aquellas aristas que conectan dos vertices distintos más de una vez.
+
+```{r}
+set.seed(22051996)
+g <- sample_gnp(6, 1, directed = FALSE, loops = TRUE) #Crea un grafo aleatorio con 6 nodos, no dirigido y con loops
+plot(g,
+     vertex.color="darkorchid",  # color de los nodos
+     vertex.size=20,             # tamaño de los nodos
+     edge.color="black")         # color de las aristas
+V(g) #Calcular nodos
+E(g) #Calcular aristas
+```
+
+En el grafo creado todos los nodos tienen un loop,ninguna de las aristas es multiple. ###Isomorfismo Se dice que entre dos grafos G1 y G2 cuyos nodos no estan etiquetados existe isomorfía si al etiquetarlos cada una de los nodos se corresponde a la perfección con el grafo de referencia. Así el grafo recien creado es isomorfo con el anterior.
+
+```{r}
+set.seed(22051998)
+g <- sample_gnp(6, 1, directed = FALSE, loops = TRUE) #Crea un grafo aleatorio con 6 nodos, no dirigido y con loops
+plot(g,
+     vertex.color="darkorchid",  # color de los nodos
+     vertex.size=20,             # tamaño de los nodos
+     edge.color="black")         # color de las aristas
+V(g) #Calcular nodos
+E(g) #Calcular aristas
+```
+
+###Conectividad Se dice que un grafo es **conectado** si no puede ser expresado como la unión de dos grafos (G= G1 U G2) . Así, todo grafo que pueda ser expresado de esa forma Es un grafo **desconectado**
+
+```{r}
+set.seed(22051996)
+g <- sample_gnp(6, 0.3, directed = FALSE, loops = FALSE) #Crea un grafo aleatorio con 6 nodos, no dirigido y con loops
+plot(g,
+     vertex.color="darkorchid",  # color de los nodos
+     vertex.size=20,             # tamaño de los nodos
+     edge.color="black")         # color de las aristas
+```
+
+En el grafo anterior ejemplificamos un grafo **desconectado** en el que cada grupo de nodos que estan conectados entre sí, son **componentes**. Con este mismo grafo podemos ejemplificar el concepto de 
+###Proximidad
+Decimos que dos vertices llamense v y w de un Grafo G son **incidentes** si hay una arista vw uniendolos.Así, en el ejemplo arriba, el nodo 4 es incidente con el 1 y 1 y 6 son incidentes con el nodo 6.
+
