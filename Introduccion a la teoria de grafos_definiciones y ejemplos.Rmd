@@ -97,4 +97,27 @@ La **secuencia de grado** de un Grafo consiste en los grados escritos en orden a
 ```{r}
 degree(g) %>% sort(decreasing=FALSE)
 ```
+###Subgraphs
+Un **Subgrafo** de un grafo G es a su vez un grafo, en el cual cada uno de sus vertices pertenece a V(G) y  cada uno de sus aristas pertenecen a E(G). En el ejemplo siguiente crearemos un nuevo grafo e, induciremos un subgrafo donde no se consideren los nodos 5 y 6.
+```{r}
+set.seed(22051996)
+g <- sample_gnp(6, 1, directed = FALSE, loops = TRUE) #Crea un grafo aleatorio con 6 nodos, no dirigido y con loops
+plot(g,
+     vertex.color="darkorchid",  # color de los nodos
+     vertex.size=20,             # tamaño de los nodos
+     edge.color="black")         # color de las aristas
+g2 <- induced_subgraph(g, 1:4) #Induce un subgrafo del grafo en g que no contenga al nodo 5 y 6
+plot(g2,
+     vertex.color="darkorchid",  # color de los nodos
+     vertex.size=20,             # tamaño de los nodos
+     edge.color="black")         # color de las aristas
+```
 
+Podemos notar que en el nuevo subgrafo donde no se consideraron los nodos 5 y 6, también se descartan las aristas que unian estos nodos con los demás. Podríamos denotar a este subgrafo como **G-S** donde S es un set de vertices. **G-e** se refiere a un subgrafo donde no se considera un vertice del grafo original, esto se ejemplifica a continuación:
+```{r}
+g3 <- induced_subgraph(g, 1:5) #Induce un subgrafo del grafo en g que no contenga al nodo 6
+plot(g3,
+     vertex.color="darkorchid",  # color de los nodos
+     vertex.size=20,             # tamaño de los nodos
+     edge.color="black")         # color de las aristas
+```
