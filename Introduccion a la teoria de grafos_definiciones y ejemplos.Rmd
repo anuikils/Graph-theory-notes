@@ -72,6 +72,29 @@ plot(g,
 ```
 
 En el grafo anterior ejemplificamos un grafo **desconectado** en el que cada grupo de nodos que estan conectados entre sí, son **componentes**. Con este mismo grafo podemos ejemplificar el concepto de 
+
 ###Proximidad
-Decimos que dos vertices llamense v y w de un Grafo G son **incidentes** si hay una arista vw uniendolos.Así, en el ejemplo arriba, el nodo 4 es incidente con el 1 y 1 y 6 son incidentes con el nodo 6.
+Decimos que dos vertices llamense v y w de un Grafo G son **incidentes** si hay una arista vw uniendolos.Así, en el ejemplo arriba, la arista que une el nodo 4 es incidente con el 1 y, las aritas que unen 1 y 6 son incidentes con el nodo 4.
+Del mismo modo en el componente restante, las aristas que unen los vertices 5 y 3 son incidentes del vertice 2. Por otro lado, se dice que las aristas que comporten un nodo son **adyacentes**, así, la arista 5,2 es adyacente de
+la arista 2,3. Mientras que en el otro componente la arista 1,4 es adyacente de la arista 4,6.
+
+Cuando hablamos del concepto de **grado** de un nodo v de G, este es el número de aristas incidentes con v y se denota deg(v)
+```{r}
+set.seed(22051996)
+g <- sample_gnp(8, 0.3, directed = FALSE, loops = FALSE) #Crea un grafo aleatorio con 6 nodos, no dirigido y con loops
+plot(g,
+     vertex.color="darkorchid",  # color de los nodos
+     vertex.size=20,             # tamaño de los nodos
+     edge.color="black")         # color de las aristas
+#Calculamos los grados de los nodos en g y ordenamos de mayor a menor.
+
+degree(g) %>% sort(decreasing=TRUE)
+```
+
+Los nodos 2, 4 y 7 tienen un valor de **grado del nodo** igual a 3; El nodo 3 tiene un **deg(v)= 2**; el resto dentro de esa componente con más nodos tiene un **deg(V)= 1**. El nodo restante en la otra componente tiene **deg(v)= 0**. Aunque en este caso no existe ningún loop, cabe mencionar que cuando existe un loop este por convención contribuye con 2 en lugar de 1 al valor del grado del nodo. Además a deg(v)= 0 se define como un **nodo aislado** y deg(v)=1 se define como un **nodo terminal**
+
+La **secuencia de grado** de un Grafo consiste en los grados escritos en orden ascendente, con repeticiones cuando es necesario, como se muestra a continuación:
+```{r}
+degree(g) %>% sort(decreasing=FALSE)
+```
 
