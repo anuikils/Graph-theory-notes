@@ -5,7 +5,7 @@ output:
     df_print: paged
 ---
 
-Se utilizo el software *Proteinortho* para obtener las relaciones de ortología entre pares de genes de un set de prueba que simulan pertenecer a distintas especies(C, E, M y L). Se obtuvo un archivo (\*.proteinortho-graph) cuyas columnas contienen los pares de genes entre los que se encontro una relación de ortología; El evalue y bitscore en ambas direcciones.
+Se utilizo el software *Proteinortho* para obtener las relaciones de ortología entre pares de genes de un set de prueba que simulan pertenecer a distintas especies(C, E, M y L). Se obtuvo un archivo (\*.proteinortho-graph) cuyas columnas contienen los pares de genes entre los que se encontro una relación de ortología; El evalue y bitscore en ambas direcciones. Se recomienda descargar este repositorio y ejecutar el archivo *prueb..html* para visulaizar la ejecución del codigo en su navegador.
 
 De ese archivo se extrajeron las dos primeras columnas que corresponderia a los pares de genes donde se hallo ortología(En archivo *Prueba_aristas.csv*)
 
