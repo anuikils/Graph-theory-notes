@@ -1,0 +1,67 @@
+---
+title: "Grafo de genes ortologos: Datos de prueba de Proteinortho"
+output:
+  html_document:
+    df_print: paged
+---
+
+Se utilizo el software *Proteinortho* para obtener las relaciones de ortología entre pares de genes de un set de prueba que simulan pertenecer a distintas especies(C, E, M y L). Se obtuvo un archivo (\*.proteinortho-graph) cuyas columnas contienen los pares de genes entre los que se encontro una relación de ortología; El evalue y bitscore en ambas direcciones.
+
+De ese archivo se extrajeron las dos primeras columnas que corresponderia a los pares de genes donde se hallo ortología(En archivo *Prueba_aristas.csv*)
+
+```{r, echo=TRUE, warning=FALSE, cache=FALSE, message=FALSE}
+
+library(igraph)         # Biblioteca para análisis de redes.
+library(tidyverse)      # Colección de bibliotecas para manipulación de datos.
+library(viridis)        # Biblioteca con paletas de colores.
+
+Aristas <- read.csv("Prueba_aristas.csv") #Carga el documento
+Aristas #Muestra el objeto "Aristas"
+```
+Procedemos a usar la libreria *igraph* para convertir nuestra lista de aristas en una red *G*
+```{r}
+Aristas %>%
+  graph_from_data_frame -> G
+G<-as.undirected(G)
+  G #Damos un vistazo a la red
+```
+Podemos ahora comenzar a calcular algunas metricas y visualizar la red
+```{r}
+
+V(G) # Nodos de la red.
+
+get.data.frame(G, what="vertices")
+
+E(G) # Aristas de la red.
+
+get.data.frame(G, what="edges") 
+```
+```{r}
+#Vizualización
+plot(G,
+     vertex.size=10,
+     vertex.color="darkorchid",
+     vertex.label=NA)    # No queremos ver las etiquetas de los nodos.
+
+V(G)$degree <- degree(G)
+get.data.frame(G,what="vertices")
+
+# Ajustamos el tamaño de los nodos.
+plot(G,
+     vertex.size=2*sqrt(V(G)$degree),
+     vertex.color="darkorchid",
+     vertex.label=NA)
+
+# Vemos cuáles son los nodos de mayor grado.
+
+degree(G) %>% sort(decreasing=TRUE)
+
+get.data.frame(G,what="vertices") %>%
+  as_tibble() %>%
+  arrange(-degree) %>%
+  head(n=30) %>%
+  pull(name)
+#Histograma
+hist(degree(G)) 
+```
+
