@@ -66,4 +66,14 @@ get.data.frame(G,what="vertices") %>%
 #Histograma
 hist(degree(G)) 
 ```
+```{r}
+is_connected(G) #¿Es G, un grafo conexo?
+components(G) #¿A qué componente pertenece cada nodo en G?; ¿Cuál es el tamaño de los componentes;¿Cua´l es el número de componentes?
+component_distribution(G) #Distribución de componentes en G
+hist(component_distribution(G))
+decompose(G, max.comps = NA, min.vertices = 0) #Crea un grafo separado para cada componente en G
+```
 
+![](componentes_prueba.png)
+
+Comprobamos que las componentes extraídas son consistentes con la salida de proteinortho, usando como ejemplo 3 de sus filas(imagen arriba). La primera fila es consistente con la componente 11, la segunda fila es consistente con la componente 10 y la tercela fila con la componente 9.
