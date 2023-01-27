@@ -101,6 +101,7 @@ degree(g) %>% sort(decreasing=FALSE)
 Un **Subgrafo** de un grafo G es a su vez un grafo, en el cual cada uno de sus vertices pertenece a V(G) y  cada uno de sus aristas pertenecen a E(G). En el ejemplo siguiente crearemos un nuevo grafo e, induciremos un subgrafo donde no se consideren los nodos 5 y 6.
 ```{r}
 set.seed(22051996)
+set.seed(22051996)
 g <- sample_gnp(6, 1, directed = FALSE, loops = TRUE) #Crea un grafo aleatorio con 6 nodos, no dirigido y con loops
 plot(g,
      vertex.color="darkorchid",  # color de los nodos
@@ -115,6 +116,7 @@ plot(g2,
 
 Podemos notar que en el nuevo subgrafo donde no se consideraron los nodos 5 y 6, también se descartan las aristas que unian estos nodos con los demás. Podríamos denotar a este subgrafo como **G-S** donde S es un set de vertices. **G-e** se refiere a un subgrafo donde no se considera un vertice del grafo original, esto se ejemplifica a continuación:
 ```{r}
+set.seed(22051996)
 g3 <- induced_subgraph(g, 1:5) #Induce un subgrafo del grafo en g que no contenga al nodo 6
 plot(g3,
      vertex.color="darkorchid",  # color de los nodos
@@ -125,6 +127,7 @@ plot(g3,
 ###Tipos de Grafos
 Revisaremos algunos tipos de grafos y aprovecharemos para revisar como podemos representar un grafo a traves de una *matriz de adyancencia*
 ```{r}
+set.seed(22051996)
 g = make_empty_graph(100) #Creación de un grafo nulo
 plot(g,
      vertex.color = "darkorchid")
@@ -135,6 +138,7 @@ En el ejemplo anterior se creo un *grafo nulo (Nn)*, como podemos observar este 
 
 A continuación, crearemos un grafo en el que todos los nodos estan conectados con todos los otros nodos. En otras palabras cada par de nodos distintos son adyacentes. Este recibe el nombre de *grafo completo (Kn)*
 ```{r}
+set.seed(22051996)
 g = make_full_graph(9)
 plot(g,
      vertex.color = "darkorchid")
@@ -143,6 +147,7 @@ adj_m
 ```
 Los grafos regulares son Un grafo en el cual cada uno de sus nodos tiene el mismo grado. Un ejemplo de grafo regular es quel de grado 2 *(2-regular)* que es un *Grafo de ciclo (Cn)*
 ```{r}
+set.seed(22051996)
 r = make_ring(10) #Crea un grafo de ciclo con 10 nodos
 plot(r,
      vertex.color = "darkorchid")
@@ -150,12 +155,14 @@ degree(r) #comprobamos que es regular
 ```
 El grafo que se obtiene de eliminar una de las aristas de un ciclo, se llama *grafo de ruta (Pn)* 
 ```{r}
+set.seed(22051996)
 p = delete.edges(r,1)
 plot(p,
      vertex.color = "darkorchid")            
 ```
 Otro ejemplo de grafo regular, son los *grafos cubicos (3-regular)* 
 ```{r}
+set.seed(22051996)
 c = make_graph("Petersen")
 plot(c,
      vertex.color = "darkorchid")
@@ -164,6 +171,7 @@ degree(r) #comprobamos que es regular
 Cabe mencionar que un *Nn* es 0-regular y un *Kn* es n-1-regular.
 
 ```{r}
+set.seed(22051996)
 Aristas = c(1,7,2,6,3,8,2,5,4,6,1,5,2,6)
 types = rep(0:1, each=4)
 g = make_bipartite_graph(types, Aristas, directed = FALSE)
@@ -174,8 +182,9 @@ plot(g,
      vertex.color = "darkorchid",
      layout = LO)
 ```
-Arriba creamos un *Grafo bipartita*el cual  tiene dos subconjuntos y los cuales no tienen aristas entre los nodos de un mismo subconjunto. Además existe el *grafo bipartita completo (Kn,n)*
+Arriba creamos un *Grafo bipartita*el cual  tiene dos subconjuntos y los cuales no tienen aristas entre los nodos de un mismo subconjunto. Además existe el *grafo bipartita completo (Kn,n)* en este también se cumple la condición de que los nodos de un subconjunto de G no son adyacentes entre sí, la diferencia es que todos los nodos de un subconjuntos se conectan con cada uno de los vertices en el otro subconjunto.
 ```{r}
+set.seed(22051996)
 g = make_full_bipartite_graph(3, 2, directed = FALSE)
 plot(g,
      vertex.color = "darkorchid")
