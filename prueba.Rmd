@@ -71,9 +71,62 @@ is_connected(G) #¿Es G, un grafo conexo?
 components(G) #¿A qué componente pertenece cada nodo en G?; ¿Cuál es el tamaño de los componentes;¿Cua´l es el número de componentes?
 component_distribution(G) #Distribución de componentes en G
 hist(component_distribution(G))
-decompose(G, max.comps = NA, min.vertices = 0) #Crea un grafo separado para cada componente en G
+gg =decompose(G, max.comps = NA, min.vertices = 0) #Crea un grafo separado para cada componente en G
+gg
 ```
 
 ![](componentes_prueba.png)
 
 Comprobamos que las componentes extraídas son consistentes con la salida de proteinortho, usando como ejemplo 3 de sus filas(imagen arriba). La primera fila es consistente con la componente 11, la segunda fila es consistente con la componente 10 y la tercela fila con la componente 9.
+A continuación, podemos visualizar todas las componentes de manera individual.
+```{r}
+plot(gg[[1]])
+plot(gg[[2]])
+plot(gg[[3]])
+plot(gg[[4]])
+plot(gg[[5]])
+plot(gg[[6]])
+plot(gg[[7]])
+plot(gg[[8]])
+plot(gg[[9]])
+plot(gg[[10]])
+plot(gg[[11]])
+plot(gg[[13]])
+plot(gg[[14]])
+plot(gg[[15]])
+plot(gg[[16]])
+plot(gg[[17]])
+plot(gg[[18]])
+plot(gg[[19]])
+plot(gg[[20]])
+plot(gg[[21]])
+plot(gg[[22]])
+plot(gg[[23]])
+plot(gg[[24]])
+plot(gg[[25]])
+plot(gg[[26]])
+plot(gg[[27]])
+plot(gg[[28]])
+plot(gg[[29]])
+plot(gg[[30]])
+plot(gg[[31]])
+plot(gg[[32]])
+plot(gg[[33]])
+plot(gg[[34]])
+```
+En este caso, podemos asumir visualizar cada una de los componentes y definir por ejemplo si son o no grafos completos.Pero si se tratase de una red de mayor "complejidad" sería mejor automatizar dicha tarea.
+```{r}
+#Crea una función para determinar si un componente es un grafo completo
+is_complete_graph <- function(z) {
+    n <- vcount(z)
+    m <- ecount(z)
+    m == (n * (n - 1)) / 2
+}
+complete_graphs <- lapply(gg, is_complete_graph) #Aplica la función is_complete_graph() a cada componente en tu lista de componentes
+complete_graph_indices <- which(complete_graphs == TRUE) #crear una lista de índices de componentes que son grafos completos
+complete_graph_components <- gg[complete_graph_indices] #Crea una lista de componentes que son grafos completos en tu red original
+plot(complete_graph_components[[1]]) #Plot ejemplo del primer componente Kn
+```
+
+Un grafo completo donde los nodos representan genes de diferentes especies y las aristas representan relaciones de ortología significa que cada gen en el grafo tiene una relación evolutiva con todos los demás genes en forma de ortología. La ortología se refiere a la relación evolutiva entre genes en diferentes especies que han evolucionado a partir de un ancestro común. Podemos observar en el ejemplo arriba del primer componente que resulto ser del tipo *Kn* existen 4 nodos, cada uno de los cuales representa un gen que pertenece a su vez a una especie distinta.
+En este contexto, un grafo completo con relaciones ortológicas entre todos los genes sugiere una fuerte conservación evolutiva del conjunto de genes entre especies. Esto podría indicar una relación funcional o coevolución de los genes, lo que posiblemente refleja los procesos biológicos compartidos o similares en los que están involucrados.
