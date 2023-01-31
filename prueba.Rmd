@@ -80,39 +80,9 @@ gg
 Comprobamos que las componentes extraídas son consistentes con la salida de proteinortho, usando como ejemplo 3 de sus filas(imagen arriba). La primera fila es consistente con la componente 11, la segunda fila es consistente con la componente 10 y la tercela fila con la componente 9.
 A continuación, podemos visualizar todas las componentes de manera individual.
 ```{r}
-plot(gg[[1]])
-plot(gg[[2]])
-plot(gg[[3]])
-plot(gg[[4]])
-plot(gg[[5]])
-plot(gg[[6]])
-plot(gg[[7]])
-plot(gg[[8]])
-plot(gg[[9]])
-plot(gg[[10]])
-plot(gg[[11]])
-plot(gg[[13]])
-plot(gg[[14]])
-plot(gg[[15]])
-plot(gg[[16]])
-plot(gg[[17]])
-plot(gg[[18]])
-plot(gg[[19]])
-plot(gg[[20]])
-plot(gg[[21]])
-plot(gg[[22]])
-plot(gg[[23]])
-plot(gg[[24]])
-plot(gg[[25]])
-plot(gg[[26]])
-plot(gg[[27]])
-plot(gg[[28]])
-plot(gg[[29]])
-plot(gg[[30]])
-plot(gg[[31]])
-plot(gg[[32]])
-plot(gg[[33]])
-plot(gg[[34]])
+for (i in 1:length(gg)) {
+  plot(gg[[i]], main = paste("Componente", i))
+}
 ```
 En este caso, podemos asumir visualizar cada una de los componentes y definir por ejemplo si son o no grafos completos.Pero si se tratase de una red de mayor "complejidad" sería mejor automatizar dicha tarea.
 ```{r}
