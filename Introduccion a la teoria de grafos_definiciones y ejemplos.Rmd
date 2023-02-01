@@ -189,3 +189,38 @@ g = make_full_bipartite_graph(3, 2, directed = FALSE)
 plot(g,
      vertex.color = "darkorchid")
 ```
+###Connectivity
+*Caminos y ciclos*
+Una *caminata(walk)* en la teoría de grafos es una secuencia de vértices donde cada par de vértices consecutivos está conectado por una arista.
+```{r}
+# Calcule la longitud de todas las caminatas que comienzan en el vértice 1 y terminan en el vértice 3 del grafo arriba
+walks <- all_simple_paths(g, from=1, to=5)
+# Número de caminatas
+print(length(walks))
+# Caminatas
+for (i in 1:length(walks)) {
+    print(walks[[i]])
+}
+```
+La salida nos dice que en este ejemplo, existen 3 caminos posibles para ir del nodo 3 al 5 y nos imprime las tres secuencias posibles. Llamamos V0 al nodo inicial y Vm al nodo donde finaliza la caminata. Al número de aristas de una caminata se le llama longitud.
+
+Otros términos relacionados son:
+
+Sendero(trail): Un sendero es una caminata donde no se repite ningúna arista.
+Camino(path): Un camino es un caminata donde no se repite ningún vértice.
+Camino cerrado(closed path/trail): Un camino cerrado es un caminata que comienza y termina en el mismo vértice.
+Ciclo(cycle): Un ciclo es un camino cerrado donde no se repite ningún vértice (excepto el vértice inicial/final).
+
+Un *conjunto desconectante(disconnecting set)* es un subconjunto de vértices cuya eliminación desconecta el grafo en dos o más componentes.
+
+```{r}
+# ¿Es un grafo conexo?
+print("Is the graph connected?")
+print(is.connected(g))
+
+# Remover el set desconectante y revisar si el nuevo grafo es conexo
+g_new <- delete.edges(g, c(E(g)[5,6]))
+plot(g_new, vertex.color="darkorchid") 
+print("Is the new graph connected?")
+print(is.connected(g_new))
+```
