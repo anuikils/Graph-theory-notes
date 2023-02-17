@@ -1,0 +1,159 @@
+---
+title: "Grafo de genes ortologos: Datos de prueba de Proteinortho"
+output:
+  html_document:
+    df_print: paged
+---
+
+Se utilizo el software *Proteinortho* para obtener las relaciones de ortología entre pares de genes de un set de prueba que simulan pertenecer a distintas especies(C, E, M y L). Se obtuvo un archivo (\*.proteinortho-graph) cuyas columnas contienen los pares de genes entre los que se encontro una relación de ortología; El evalue y bitscore en ambas direcciones.
+
+De ese archivo se extrajeron las dos primeras columnas que corresponderia a los pares de genes donde se hallo ortología(En archivo *Prueba_aristas.csv*)
+
+```{r, echo=TRUE, warning=FALSE, cache=FALSE, message=FALSE}
+
+library(igraph)         # Biblioteca para análisis de redes.
+library(tidyverse)      # Colección de bibliotecas para manipulación de datos.
+library(viridis)        # Biblioteca con paletas de colores.
+library(readr)
+Aristas <- read.csv("Prueba_aristas.csv") #Carga el documento
+Aristas #Muestra el objeto "Aristas"
+```
+
+Procedemos a usar la libreria *igraph* para convertir nuestra lista de aristas en una red *G*
+
+```{r}
+Aristas %>%
+  graph_from_data_frame -> G
+G<-as.undirected(G)
+  G #Damos un vistazo a la red
+```
+
+Podemos ahora comenzar a calcular algunas metricas y visualizar la red
+
+```{r}
+
+V(G) # Nodos de la red.
+
+get.data.frame(G, what="vertices")
+
+E(G) # Aristas de la red.
+
+get.data.frame(G, what="edges") 
+```
+
+```{r}
+#Vizualización
+set.seed(22051996)
+plot(G,
+     vertex.size=10,
+     vertex.color="darkorchid",
+     vertex.label=NA)    # No queremos ver las etiquetas de los nodos.
+
+V(G)$degree <- degree(G)
+get.data.frame(G,what="vertices")
+
+# Ajustamos el tamaño de los nodos.
+set.seed(22051996)
+plot(G,
+     vertex.size=2*sqrt(V(G)$degree),
+     vertex.color="darkorchid",
+     vertex.label=NA)
+
+# Vemos cuáles son los nodos de mayor grado.
+
+degree(G) %>% sort(decreasing=TRUE)
+
+get.data.frame(G,what="vertices") %>%
+  as_tibble() %>%
+  arrange(-degree) %>%
+  head(n=30) %>%
+  pull(name)
+#Histograma
+hist(degree(G)) 
+```
+
+```{r}
+is_connected(G) #¿Es G, un grafo conexo?
+components(G) #¿A qué componente pertenece cada nodo en G?; ¿Cuál es el tamaño de los componentes;¿Cua´l es el número de componentes?
+component_distribution(G) #Distribución de componentes en G
+hist(component_distribution(G))
+gg =decompose(G, max.comps = NA, min.vertices = 0) #Crea un grafo separado para cada componente en G
+gg
+```
+
+![](componentes_prueba.png)
+
+Comprobamos que las componentes extraídas son consistentes con la salida de proteinortho, usando como ejemplo 3 de sus filas(imagen arriba). La primera fila es consistente con la componente 11, la segunda fila es consistente con la componente 10 y la tercela fila con la componente 9.
+
+A continuación, podemos visualizar todas las componentes de manera individual.
+```{r}
+
+for (i in 1:length(gg)) {
+  plot(gg[[i]], main = paste("Componente", i))
+}
+```
+En este caso, podemos asumir visualizar cada una de los componentes y definir por ejemplo si son o no grafos completos.Pero si se tratase de una red de mayor "complejidad" sería mejor automatizar dicha tarea.
+```{r}
+#Crea una función para determinar si un componente es un grafo completo
+is_complete_graph <- function(z) {
+    n <- vcount(z)
+    m <- ecount(z)
+    m == (n * (n - 1)) / 2
+}
+complete_graphs <- lapply(gg, is_complete_graph) #Aplica la función is_complete_graph() a cada componente en tu lista de componentes
+complete_graph_indices <- which(complete_graphs == TRUE) #crear una lista de índices de componentes que son grafos completos
+complete_graph_components <- gg[complete_graph_indices] #Crea una lista de componentes que son grafos completos en tu red original
+plot(complete_graph_components[[1]]) #Plot ejemplo del primer componente Kn
+```
+```{r}
+#Componentes conexas
+componentes <- list()
+for (i in seq_along(gg)) {
+  componente <- gg[[i]]
+  # Extraemos los nombres de los vértices
+  nombres_vertices <- V(componente)$name
+
+  # Agregamos los nombres de los vértices a la variable componentes
+  componentes[[i]] <- nombres_vertices
+}
+
+# Imprimimos la lista de componentes
+print(componentes)
+
+# Accedemos a los elementos de la primera fila
+(componentes[[1]][[1]])
+(componentes[[1]][[2]])
+(componentes[[1]][[3]])
+(componentes[[1]][[4]])
+
+
+
+#output *tsv proteinortho
+# Leer archivo
+ortogrupos <- read.table("ortogrupos.csv", header=FALSE, sep=" ", fill=TRUE)
+ortogrupos
+# Crear una lista vacía para almacenar los elementos
+lista_ortogrupos <- list()
+
+# Recorrer cada fila del dataframe
+for (i in 1:nrow(ortogrupos)) {
+    
+    # Crear un vector con los valores de la fila actual
+    fila <- as.character(unlist(ortogrupos[i, ]))
+    
+    # Eliminar los valores vacíos de la fila
+    fila <- fila[fila != ""]
+    
+    # Agregar el vector a la lista
+    lista_ortogrupos[[i]] <- fila
+    
+}
+
+# Imprimir la lista
+print(lista_ortogrupos)
+#Prueba para acceder a los elementos
+lista_ortogrupos[[1]][[1]]
+lista_ortogrupos[[1]][[2]]
+lista_ortogrupos[[1]][[3]]
+lista_ortogrupos[[1]][[4]]
+```
