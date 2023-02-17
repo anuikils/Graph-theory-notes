@@ -1651,9 +1651,9 @@ lista de aristas en una red <em>G</em></p>
   graph_from_data_frame -&gt; G
 G&lt;-as.undirected(G)
   G #Damos un vistazo a la red</code></pre>
-<pre><code>## IGRAPH f6fad25 UN-- 112 118 -- 
+<pre><code>## IGRAPH 9c7fd59 UN-- 112 118 -- 
 ## + attr: name (v/c)
-## + edges from f6fad25 (vertex names):
+## + edges from 9c7fd59 (vertex names):
 ##  [1] E_10 --M_10  E_11 --M_11  E_14 --M_14  E_15 --M_15  E_16 --M_16 
 ##  [6] E_17 --M_17  E_18 --M_18  E_19 --M_19  E_313--M_313 E_13 --M_621
 ## [11] E_10 --L_10  M_10 --L_10  E_11 --L_11  M_11 --L_11  E_14 --L_14 
@@ -1666,7 +1666,7 @@ G&lt;-as.undirected(G)
 <p>Podemos ahora comenzar a calcular algunas metricas y visualizar la
 red</p>
 <pre class="r"><code>V(G) # Nodos de la red.</code></pre>
-<pre><code>## + 112/112 vertices, named, from f6fad25:
+<pre><code>## + 112/112 vertices, named, from 9c7fd59:
 ##   [1] E_10  E_11  E_13  E_14  E_15  E_16  E_17  E_18  E_19  E_313 E_315 E_368
 ##  [13] M_10  M_11  M_14  M_15  M_16  M_17  M_18  M_19  M_2   M_20  M_313 M_621
 ##  [25] M_630 L_10  L_11  L_14  L_15  L_16  L_17  L_18  L_19  L_2   L_20  L_313
@@ -1684,7 +1684,7 @@ red</p>
   </script>
 </div>
 <pre class="r"><code>E(G) # Aristas de la red.</code></pre>
-<pre><code>## + 118/118 edges from f6fad25 (vertex names):
+<pre><code>## + 118/118 edges from 9c7fd59 (vertex names):
 ##  [1] E_10 --M_10  E_11 --M_11  E_14 --M_14  E_15 --M_15  E_16 --M_16 
 ##  [6] E_17 --M_17  E_18 --M_18  E_19 --M_19  E_313--M_313 E_13 --M_621
 ## [11] E_10 --L_10  M_10 --L_10  E_11 --L_11  M_11 --L_11  E_14 --L_14 
@@ -1791,211 +1791,211 @@ hist(degree(G)) </code></pre>
 <pre class="r"><code>gg =decompose(G, max.comps = NA, min.vertices = 0) #Crea un grafo separado para cada componente en G
 gg</code></pre>
 <pre><code>## [[1]]
-## IGRAPH f783253 UN-- 4 6 -- 
+## IGRAPH 9ce43c5 UN-- 4 6 -- 
 ## + attr: name (v/c), degree (v/n)
-## + edges from f783253 (vertex names):
+## + edges from 9ce43c5 (vertex names):
 ## [1] E_10--M_10 E_10--L_10 M_10--L_10 E_10--C_10 M_10--C_10 L_10--C_10
 ## 
 ## [[2]]
-## IGRAPH f783271 UN-- 4 6 -- 
+## IGRAPH 9ce43d5 UN-- 4 6 -- 
 ## + attr: name (v/c), degree (v/n)
-## + edges from f783271 (vertex names):
+## + edges from 9ce43d5 (vertex names):
 ## [1] E_11--M_11 E_11--L_11 M_11--L_11 E_11--C_11 M_11--C_11 L_11--C_11
 ## 
 ## [[3]]
-## IGRAPH f78328e UN-- 4 6 -- 
+## IGRAPH 9ce43e4 UN-- 4 6 -- 
 ## + attr: name (v/c), degree (v/n)
-## + edges from f78328e (vertex names):
+## + edges from 9ce43e4 (vertex names):
 ## [1] E_13 --M_621 E_13 --L_621 M_621--L_621 E_13 --C_13  M_621--C_13 
 ## [6] L_621--C_13 
 ## 
 ## [[4]]
-## IGRAPH f7832a4 UN-- 4 6 -- 
+## IGRAPH 9ce43f2 UN-- 4 6 -- 
 ## + attr: name (v/c), degree (v/n)
-## + edges from f7832a4 (vertex names):
+## + edges from 9ce43f2 (vertex names):
 ## [1] E_14--M_14 E_14--L_14 M_14--L_14 E_14--C_14 M_14--C_14 L_14--C_14
 ## 
 ## [[5]]
-## IGRAPH f7832b9 UN-- 4 6 -- 
+## IGRAPH 9ce43fd UN-- 4 6 -- 
 ## + attr: name (v/c), degree (v/n)
-## + edges from f7832b9 (vertex names):
+## + edges from 9ce43fd (vertex names):
 ## [1] E_15--M_15 E_15--L_15 M_15--L_15 E_15--C_15 M_15--C_15 L_15--C_15
 ## 
 ## [[6]]
-## IGRAPH f7832cc UN-- 4 6 -- 
+## IGRAPH 9ce440a UN-- 4 6 -- 
 ## + attr: name (v/c), degree (v/n)
-## + edges from f7832cc (vertex names):
+## + edges from 9ce440a (vertex names):
 ## [1] E_16--M_16 E_16--L_16 M_16--L_16 E_16--C_16 M_16--C_16 L_16--C_16
 ## 
 ## [[7]]
-## IGRAPH f7832e0 UN-- 4 6 -- 
+## IGRAPH 9ce4418 UN-- 4 6 -- 
 ## + attr: name (v/c), degree (v/n)
-## + edges from f7832e0 (vertex names):
+## + edges from 9ce4418 (vertex names):
 ## [1] E_17--M_17 E_17--L_17 M_17--L_17 E_17--C_17 M_17--C_17 L_17--C_17
 ## 
 ## [[8]]
-## IGRAPH f7832f3 UN-- 4 6 -- 
+## IGRAPH 9ce4424 UN-- 4 6 -- 
 ## + attr: name (v/c), degree (v/n)
-## + edges from f7832f3 (vertex names):
+## + edges from 9ce4424 (vertex names):
 ## [1] E_18--M_18 E_18--L_18 M_18--L_18 E_18--C_64 M_18--C_64 L_18--C_64
 ## 
 ## [[9]]
-## IGRAPH f783306 UN-- 5 7 -- 
+## IGRAPH 9ce442f UN-- 5 7 -- 
 ## + attr: name (v/c), degree (v/n)
-## + edges from f783306 (vertex names):
+## + edges from 9ce442f (vertex names):
 ## [1] E_19--M_19 E_19--L_19 M_19--L_19 E_19--C_22 E_19--C_63 M_19--C_63 L_19--C_63
 ## 
 ## [[10]]
-## IGRAPH f783319 UN-- 6 8 -- 
+## IGRAPH 9ce443d UN-- 6 8 -- 
 ## + attr: name (v/c), degree (v/n)
-## + edges from f783319 (vertex names):
+## + edges from 9ce443d (vertex names):
 ## [1] E_313--M_313 E_313--L_313 M_313--L_313 E_313--C_12  E_315--C_12 
 ## [6] M_313--C_12  L_313--C_12  L_313--C_21 
 ## 
 ## [[11]]
-## IGRAPH f78332c UN-- 6 8 -- 
+## IGRAPH 9ce4449 UN-- 6 8 -- 
 ## + attr: name (v/c), degree (v/n)
-## + edges from f78332c (vertex names):
+## + edges from 9ce4449 (vertex names):
 ## [1] E_368--L_323 E_368--L_627 E_368--M_627 L_627--M_627 E_368--C_1  
 ## [6] M_630--C_1   L_323--C_1   L_627--C_1  
 ## 
 ## [[12]]
-## IGRAPH f78333f UN-- 6 9 -- 
+## IGRAPH 9ce4455 UN-- 6 9 -- 
 ## + attr: name (v/c), degree (v/n)
-## + edges from f78333f (vertex names):
+## + edges from 9ce4455 (vertex names):
 ## [1] M_2--L_2   M_2--C_164 L_2--C_164 M_2--C_166 L_2--C_166 M_2--C_167 L_2--C_167
 ## [8] M_2--C_2   L_2--C_2  
 ## 
 ## [[13]]
-## IGRAPH f783351 UN-- 3 3 -- 
+## IGRAPH 9ce4461 UN-- 3 3 -- 
 ## + attr: name (v/c), degree (v/n)
-## + edges from f783351 (vertex names):
+## + edges from 9ce4461 (vertex names):
 ## [1] M_20--L_20 M_20--C_20 L_20--C_20
 ## 
 ## [[14]]
-## IGRAPH f783365 UN-- 2 1 -- 
+## IGRAPH 9ce446f UN-- 2 1 -- 
 ## + attr: name (v/c), degree (v/n)
-## + edge from f783365 (vertex names):
+## + edge from 9ce446f (vertex names):
 ## [1] M_3--L_3
 ## 
 ## [[15]]
-## IGRAPH f783386 UN-- 3 2 -- 
+## IGRAPH 9ce447e UN-- 3 2 -- 
 ## + attr: name (v/c), degree (v/n)
-## + edges from f783386 (vertex names):
+## + edges from 9ce447e (vertex names):
 ## [1] M_317--L_317 L_317--E_437
 ## 
 ## [[16]]
-## IGRAPH f7833a3 UN-- 3 2 -- 
+## IGRAPH 9ce448b UN-- 3 2 -- 
 ## + attr: name (v/c), degree (v/n)
-## + edges from f7833a3 (vertex names):
+## + edges from 9ce448b (vertex names):
 ## [1] M_319--L_319 M_319--E_367
 ## 
 ## [[17]]
-## IGRAPH f7833b6 UN-- 2 1 -- 
+## IGRAPH 9ce4497 UN-- 2 1 -- 
 ## + attr: name (v/c), degree (v/n)
-## + edge from f7833b6 (vertex names):
+## + edge from 9ce4497 (vertex names):
 ## [1] M_328--L_328
 ## 
 ## [[18]]
-## IGRAPH f7833cb UN-- 2 1 -- 
+## IGRAPH 9ce44a3 UN-- 2 1 -- 
 ## + attr: name (v/c), degree (v/n)
-## + edge from f7833cb (vertex names):
+## + edge from 9ce44a3 (vertex names):
 ## [1] M_331--L_331
 ## 
 ## [[19]]
-## IGRAPH f7833de UN-- 2 1 -- 
+## IGRAPH 9ce44bb UN-- 2 1 -- 
 ## + attr: name (v/c), degree (v/n)
-## + edge from f7833de (vertex names):
+## + edge from 9ce44bb (vertex names):
 ## [1] M_333--L_333
 ## 
 ## [[20]]
-## IGRAPH f783409 UN-- 3 2 -- 
+## IGRAPH 9ce44db UN-- 3 2 -- 
 ## + attr: name (v/c), degree (v/n)
-## + edges from f783409 (vertex names):
+## + edges from 9ce44db (vertex names):
 ## [1] M_336--L_336 M_336--E_366
 ## 
 ## [[21]]
-## IGRAPH f78341f UN-- 2 1 -- 
+## IGRAPH 9ce450a UN-- 2 1 -- 
 ## + attr: name (v/c), degree (v/n)
-## + edge from f78341f (vertex names):
+## + edge from 9ce450a (vertex names):
 ## [1] M_4--L_4
 ## 
 ## [[22]]
-## IGRAPH f783433 UN-- 2 1 -- 
+## IGRAPH 9ce453f UN-- 2 1 -- 
 ## + attr: name (v/c), degree (v/n)
-## + edge from f783433 (vertex names):
+## + edge from 9ce453f (vertex names):
 ## [1] M_5--L_5
 ## 
 ## [[23]]
-## IGRAPH f783446 UN-- 2 1 -- 
+## IGRAPH 9ce4576 UN-- 2 1 -- 
 ## + attr: name (v/c), degree (v/n)
-## + edge from f783446 (vertex names):
+## + edge from 9ce4576 (vertex names):
 ## [1] M_6--L_6
 ## 
 ## [[24]]
-## IGRAPH f783459 UN-- 3 2 -- 
+## IGRAPH 9ce458f UN-- 3 2 -- 
 ## + attr: name (v/c), degree (v/n)
-## + edges from f783459 (vertex names):
+## + edges from 9ce458f (vertex names):
 ## [1] M_617--L_617 L_617--E_432
 ## 
 ## [[25]]
-## IGRAPH f78346b UN-- 2 1 -- 
+## IGRAPH 9ce45a3 UN-- 2 1 -- 
 ## + attr: name (v/c), degree (v/n)
-## + edge from f78346b (vertex names):
+## + edge from 9ce45a3 (vertex names):
 ## [1] M_619--L_619
 ## 
 ## [[26]]
-## IGRAPH f783480 UN-- 2 1 -- 
+## IGRAPH 9ce45b0 UN-- 2 1 -- 
 ## + attr: name (v/c), degree (v/n)
-## + edge from f783480 (vertex names):
+## + edge from 9ce45b0 (vertex names):
 ## [1] M_623--L_623
 ## 
 ## [[27]]
-## IGRAPH f78349c UN-- 3 2 -- 
+## IGRAPH 9ce45bc UN-- 3 2 -- 
 ## + attr: name (v/c), degree (v/n)
-## + edges from f78349c (vertex names):
+## + edges from 9ce45bc (vertex names):
 ## [1] M_632--L_631 M_632--L_633
 ## 
 ## [[28]]
-## IGRAPH f7834af UN-- 2 1 -- 
+## IGRAPH 9ce45c9 UN-- 2 1 -- 
 ## + attr: name (v/c), degree (v/n)
-## + edge from f7834af (vertex names):
+## + edge from 9ce45c9 (vertex names):
 ## [1] M_636--L_635
 ## 
 ## [[29]]
-## IGRAPH f7834c2 UN-- 3 2 -- 
+## IGRAPH 9ce45d5 UN-- 3 2 -- 
 ## + attr: name (v/c), degree (v/n)
-## + edges from f7834c2 (vertex names):
+## + edges from 9ce45d5 (vertex names):
 ## [1] M_638--L_637 M_638--L_639
 ## 
 ## [[30]]
-## IGRAPH f7834d5 UN-- 5 5 -- 
+## IGRAPH 9ce45e4 UN-- 5 5 -- 
 ## + attr: name (v/c), degree (v/n)
-## + edges from f7834d5 (vertex names):
+## + edges from 9ce45e4 (vertex names):
 ## [1] M_640--L_641 M_642--L_641 M_649--L_641 M_640--L_643 M_642--L_643
 ## 
 ## [[31]]
-## IGRAPH f7834e9 UN-- 4 4 -- 
+## IGRAPH 9ce45f1 UN-- 4 4 -- 
 ## + attr: name (v/c), degree (v/n)
-## + edges from f7834e9 (vertex names):
+## + edges from 9ce45f1 (vertex names):
 ## [1] M_644--L_645 M_646--L_645 M_644--L_647 M_646--L_647
 ## 
 ## [[32]]
-## IGRAPH f7834fc UN-- 2 1 -- 
+## IGRAPH 9ce45fd UN-- 2 1 -- 
 ## + attr: name (v/c), degree (v/n)
-## + edge from f7834fc (vertex names):
+## + edge from 9ce45fd (vertex names):
 ## [1] M_8--L_8
 ## 
 ## [[33]]
-## IGRAPH f78350f UN-- 2 1 -- 
+## IGRAPH 9ce4609 UN-- 2 1 -- 
 ## + attr: name (v/c), degree (v/n)
-## + edge from f78350f (vertex names):
+## + edge from 9ce4609 (vertex names):
 ## [1] M_9--L_9
 ## 
 ## [[34]]
-## IGRAPH f783522 UN-- 3 2 -- 
+## IGRAPH 9ce4616 UN-- 3 2 -- 
 ## + attr: name (v/c), degree (v/n)
-## + edges from f783522 (vertex names):
+## + edges from 9ce4616 (vertex names):
 ## [1] M_323--E_317 M_634--E_317</code></pre>
 <p><img src="data:image/png;base64,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" /></p>
 <p>Comprobamos que las componentes extraídas son consistentes con la
@@ -2284,6 +2284,63 @@ lista_ortogrupos[[1]][[1]]</code></pre>
 <pre><code>## [1] &quot;L_627&quot;</code></pre>
 <pre class="r"><code>lista_ortogrupos[[1]][[4]]</code></pre>
 <pre><code>## [1] &quot;L_323&quot;</code></pre>
+<pre class="r"><code># Inicializar una lista para almacenar los índices de las filas que coinciden
+indices_coincidencia &lt;- list()
+
+# Loop for anidado para comparar cada elemento de las dos listas
+for (i in 1:length(componentes)) {
+  for (j in 1:length(lista_ortogrupos)) {
+    # Comparar si coinciden todas las posiciones de la fila
+    if (all(componentes[[i]] %in% lista_ortogrupos[[j]]) &amp; all(lista_ortogrupos[[j]] %in% componentes[[i]])) {
+      indices_coincidencia[[length(indices_coincidencia)+1]] &lt;- c(i, j)  # Guardar el índice de la fila que coincide
+    }
+  }
+}
+
+# Mostrar los resultados
+if (length(indices_coincidencia) == 0) {
+  cat(&quot;No se encontraron coincidencias&quot;)
+} else {
+  cat(&quot;Se encontraron&quot;, length(indices_coincidencia), &quot;coincidencias en las filas:&quot;)
+  for (k in 1:length(indices_coincidencia)) {
+    cat(&quot;\n- Fila&quot;, indices_coincidencia[[k]][1], &quot;de componentes y fila&quot;, indices_coincidencia[[k]][2], &quot;de lista_ortogrupos&quot;)
+  }
+}</code></pre>
+<pre><code>## Se encontraron 34 coincidencias en las filas:
+## - Fila 1 de componentes y fila 11 de lista_ortogrupos
+## - Fila 2 de componentes y fila 9 de lista_ortogrupos
+## - Fila 3 de componentes y fila 10 de lista_ortogrupos
+## - Fila 4 de componentes y fila 5 de lista_ortogrupos
+## - Fila 5 de componentes y fila 6 de lista_ortogrupos
+## - Fila 6 de componentes y fila 7 de lista_ortogrupos
+## - Fila 7 de componentes y fila 8 de lista_ortogrupos
+## - Fila 8 de componentes y fila 4 de lista_ortogrupos
+## - Fila 9 de componentes y fila 3 de lista_ortogrupos
+## - Fila 10 de componentes y fila 2 de lista_ortogrupos
+## - Fila 11 de componentes y fila 1 de lista_ortogrupos
+## - Fila 12 de componentes y fila 12 de lista_ortogrupos
+## - Fila 13 de componentes y fila 13 de lista_ortogrupos
+## - Fila 14 de componentes y fila 23 de lista_ortogrupos
+## - Fila 15 de componentes y fila 14 de lista_ortogrupos
+## - Fila 16 de componentes y fila 17 de lista_ortogrupos
+## - Fila 17 de componentes y fila 24 de lista_ortogrupos
+## - Fila 18 de componentes y fila 25 de lista_ortogrupos
+## - Fila 19 de componentes y fila 26 de lista_ortogrupos
+## - Fila 20 de componentes y fila 15 de lista_ortogrupos
+## - Fila 21 de componentes y fila 27 de lista_ortogrupos
+## - Fila 22 de componentes y fila 28 de lista_ortogrupos
+## - Fila 23 de componentes y fila 29 de lista_ortogrupos
+## - Fila 24 de componentes y fila 16 de lista_ortogrupos
+## - Fila 25 de componentes y fila 30 de lista_ortogrupos
+## - Fila 26 de componentes y fila 31 de lista_ortogrupos
+## - Fila 27 de componentes y fila 21 de lista_ortogrupos
+## - Fila 28 de componentes y fila 32 de lista_ortogrupos
+## - Fila 29 de componentes y fila 20 de lista_ortogrupos
+## - Fila 30 de componentes y fila 18 de lista_ortogrupos
+## - Fila 31 de componentes y fila 19 de lista_ortogrupos
+## - Fila 32 de componentes y fila 33 de lista_ortogrupos
+## - Fila 33 de componentes y fila 34 de lista_ortogrupos
+## - Fila 34 de componentes y fila 22 de lista_ortogrupos</code></pre>
 
 
 
