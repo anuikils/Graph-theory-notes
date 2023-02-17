@@ -155,5 +155,28 @@ print(lista_ortogrupos)
 lista_ortogrupos[[1]][[1]]
 lista_ortogrupos[[1]][[2]]
 lista_ortogrupos[[1]][[3]]
-lista_ortogrupos[[1]][[4]]
+##Match entre "componentes" y "lista_ortogrupos"
+```{r}
+# Inicializar una lista para almacenar los índices de las filas que coinciden
+indices_coincidencia <- list()
+
+# Loop for anidado para comparar cada elemento de las dos listas
+for (i in 1:length(componentes)) {
+  for (j in 1:length(lista_ortogrupos)) {
+    # Comparar si coinciden todas las posiciones de la fila
+    if (all(componentes[[i]] %in% lista_ortogrupos[[j]]) & all(lista_ortogrupos[[j]] %in% componentes[[i]])) {
+      indices_coincidencia[[length(indices_coincidencia)+1]] <- c(i, j)  # Guardar el índice de la fila que coincide
+    }
+  }
+}
+
+# Mostrar los resultados
+if (length(indices_coincidencia) == 0) {
+  cat("No se encontraron coincidencias")
+} else {
+  cat("Se encontraron", length(indices_coincidencia), "coincidencias en las filas:")
+  for (k in 1:length(indices_coincidencia)) {
+    cat("\n- Fila", indices_coincidencia[[k]][1], "de componentes y fila", indices_coincidencia[[k]][2], "de lista_ortogrupos")
+  }
+}
 ```
