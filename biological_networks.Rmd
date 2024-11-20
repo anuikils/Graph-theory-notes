@@ -1,0 +1,383 @@
+---
+title: "Analysis of Biological networks"
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+```{r}
+library(igraph)
+library(visNetwork)
+library(rcartocolor)
+library(readr)
+library(ggplot2)
+```
+```{r}
+# 1. Create a simple biological network using igraph
+
+# Define the nodes (genes, proteins, etc.)
+nodes <- data.frame(id = 1:6,
+                    label = c("Gene1", "Gene2", "Gene3", "Gene4", "Gene5", "Gene6"),
+                    group = c("A", "A", "B", "B", "C", "C"))
+```
+```{r}
+# Define the edges (interactions between genes/proteins)
+edges <- data.frame(from = c(1, 1, 2, 3, 4, 5, 5),
+                    to = c(2, 3, 4, 5, 6, 6, 1))
+```
+```{r}
+# Create the graph object with igraph
+g <- graph_from_data_frame(d = edges, vertices = nodes, directed = FALSE)
+
+# Display basic information about the network
+print(g)
+```
+```{r}
+# 2. Basic visualization with igraph
+
+# Map groups to colors using rcartocolor palette "DarkMint"
+group_colors <- rcartocolor::carto_pal(n = length(unique(nodes$group)), name = "DarkMint")
+names(group_colors) <- unique(nodes$group)
+V(g)$color <- group_colors[V(g)$group]
+
+# Basic plot with igraph
+plot(g, vertex.label = V(g)$label, vertex.color = V(g)$color, main = "Basic Network Visualization by Group")
+```
+```{r}
+# 3. Interactive visualization with visNetwork
+
+# Convert the igraph object to a format compatible with visNetwork
+nodes_vis <- data.frame(id = V(g)$name,
+                        label = V(g)$label,
+                        group = V(g)$group,
+                        color = group_colors[V(g)$group])
+
+edges_vis <- data.frame(from = as.numeric(as.character(edges$from)),
+                        to = as.numeric(as.character(edges$to)))
+```
+```{r}
+# Create the interactive network
+visNetwork(nodes_vis, edges_vis) %>%
+  visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE) %>%
+  visGroups(groupname = "A", color = group_colors["A"]) %>%
+  visGroups(groupname = "B", color = group_colors["B"]) %>%
+  visGroups(groupname = "C", color = group_colors["C"])
+```
+```{r}
+# 4. Basic network analysis
+
+# Calculate the degree of each node
+degree_values <- degree(g)
+print(degree_values)
+
+# Visualize the degree of each node using visNetwork
+nodes_vis$size <- degree_values * 10  # Scale the size for visualization
+visNetwork(nodes_vis, edges_vis) %>%
+  visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE) %>%
+  visGroups(groupname = "A", color = group_colors["A"]) %>%
+  visGroups(groupname = "B", color = group_colors["B"]) %>%
+  visGroups(groupname = "C", color = group_colors["C"]) %>%
+  visNodes(size = nodes_vis$size) %>%
+  visLayout(randomSeed = 42) %>%
+  visInteraction(zoomView = TRUE) %>%
+  visPhysics(stabilization = FALSE)
+```
+```{r}
+# Calculate betweenness centrality
+betweenness_values <- betweenness(g)
+print(betweenness_values)
+
+# Visualize betweenness centrality using visNetwork
+nodes_vis$size <- betweenness_values * 10  # Scale the size for visualization
+visNetwork(nodes_vis, edges_vis) %>%
+  visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE) %>%
+  visGroups(groupname = "A", color = group_colors["A"]) %>%
+  visGroups(groupname = "B", color = group_colors["B"]) %>%
+  visGroups(groupname = "C", color = group_colors["C"]) %>%
+  visNodes(size = nodes_vis$size) %>%
+  visLayout(randomSeed = 42) %>%
+  visInteraction(zoomView = TRUE) %>%
+  visPhysics(stabilization = FALSE)
+```
+```{r}
+# Calculate closeness centrality
+closeness_values <- closeness(g)
+print(closeness_values)
+
+# Visualize closeness centrality using visNetwork
+nodes_vis$size <- closeness_values * 100  # Scale the size for visualization
+visNetwork(nodes_vis, edges_vis) %>%
+  visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE) %>%
+  visGroups(groupname = "A", color = group_colors["A"]) %>%
+  visGroups(groupname = "B", color = group_colors["B"]) %>%
+  visGroups(groupname = "C", color = group_colors["C"]) %>%
+  visNodes(size = nodes_vis$size) %>%
+  visLayout(randomSeed = 42) %>%
+  visInteraction(zoomView = TRUE) %>%
+  visPhysics(stabilization = FALSE)
+```
+1. **Degree**:
+    - **What it is**: The degree of a node is the number of connections (or edges) it has with other nodes.
+    - **Why it's used**: In a protein-protein interaction (PPI) network, the degree can indicate how many interactions a protein has with other proteins. Proteins with a high degree may be crucial for the stability and functionality of the network because they interact with many other proteins.
+    - **What information it provides**: Identifying proteins with a high degree can help you discover key proteins or "hubs" that may play important roles in biological processes or diseases.
+
+2. **Betweenness Centrality**:
+    - **What it is**: Betweenness centrality measures the number of times a node acts as a bridge along the shortest path between two other nodes.
+    - **Why it's used**: In PPI networks, betweenness centrality can indicate proteins that control the flow of information or interaction between different parts of the network. These proteins can be critical for communication within the network.
+    - **What information it provides**: Proteins with high betweenness centrality might be potential targets for drug development because they control key interaction pathways in the network.
+
+3. **Closeness Centrality**:
+    - **What it is**: Closeness centrality measures how close a node is to all other nodes in the network, based on the shortest paths.
+    - **Why it's used**: In PPI networks, closeness centrality can indicate how quickly a protein can interact with other proteins. Proteins with high closeness centrality can quickly disseminate signals or interact with many parts of the network.
+    - **What information it provides**: Identifying proteins with high closeness centrality can help you find proteins that are efficient at spreading information or signals across the network.
+
+### Community Detection
+
+- **What it is**: Community detection involves identifying groups of nodes (or proteins) that are more densely connected to each other than to the rest of the network.
+- **Why it's used**: In PPI networks, communities can represent functional modules, where proteins within the same community are involved in the same biological process or pathway.
+- **What information it provides**: Detecting communities can help you understand the modular structure of the network and identify sets of proteins that work together, which is valuable for understanding complex biological functions and disease mechanisms.
+
+1. Load Libraries:
+`igraph`: For network analysis and graph operations.
+`visNetwork`: For creating interactive network visualizations.
+`rcartocolor`: For using color palettes.
+`readr`: For reading data from files.
+`ggplot2`: For creating plots.
+```{r}
+library(igraph)
+library(visNetwork)
+library(rcartocolor)
+library(readr)
+library(ggplot2)
+```
+2.Set Seed:
+`set.seed(22)`: Ensures reproducibility by setting the random seed to 22.
+```{r}
+# Set the seed for reproducibility
+set.seed(22)
+```
+3. Load Data and Create Graph:
+`readr::read_tsv("alzheimer_edges_stringdb.tsv")`: Reads the edge data from a TSV file into a data frame.
+`graph.data.frame(d = df_edges, directed = FALSE)`: Creates an undirected graph from the data frame.
+```{r}
+# Load data from the TSV file
+df_edges <- readr::read_tsv("alzheimer_edges_stringdb.tsv")
+g <- graph.data.frame(d = df_edges, directed = FALSE)
+```
+4. Prepare Nodes for Visualization:
+`data.frame(id = V(g)$name, label = V(g)$name, size = 10)`: Creates a nodes data frame with columns id, label, and size from the graph's vertices.
+```{r}
+# Convert igraph object to visNetwork format:
+nodes <- data.frame(id = V(g)$name, label = V(g)$name, size = 10)
+```
+5. `rcartocolor::carto_pal(n = length(V(g)), name = "DarkMint")`: Generates a color palette with the same number of colors as there are nodes in the graph.
+`nodes$color <- palette:` Assigns the generated colors to the nodes.
+```{r}
+# Generate colors based on the 'DarkMint' palette from rcartocolor
+palette <- rcartocolor::carto_pal(n = length(V(g)), name = "DarkMint")
+nodes$color <- palette
+```
+6. `as.data.frame(get.edgelist(g))`: Converts the edge list of the graph to a data frame.
+`colnames(edges) <- c("from", "to")`: Renames the columns to from and to for compatibility with visNetwork.
+```{r}
+edges <- as.data.frame(get.edgelist(g))
+colnames(edges) <- c("from", "to")
+```
+7. `Create Interactive Network Visualization`:
+`visNetwork(nodes, edges)`: Initializes the network visualization with nodes and edges.
+`visEdges(smooth = FALSE)`: Disables smooth edges.
+`visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE)`: Enables options for highlighting the nearest nodes and selecting nodes by ID.
+`visPhysics(stabilization = list(enabled = TRUE, iterations = 10, updateInterval = 10))`: Applies physics settings for layout stabilization.
+`visInteraction(dragNodes = TRUE, dragView = TRUE, zoomView = TRUE)`: Enables interaction options like dragging nodes and zooming.
+```{r}
+# Create and display the interactive network with stabilized layout
+network <- visNetwork(nodes, edges, width = "100%", height = "800px") %>%
+  visEdges(smooth = TRUE) %>%
+  visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE) %>%
+  visPhysics(stabilization = list(enabled = TRUE, iterations = 10, updateInterval = 10), 
+             solver = "barnesHut") %>%
+  visInteraction(dragNodes = TRUE, dragView = TRUE, zoomView = TRUE)
+
+network  # Display the network in the viewer
+```
+```{r}
+# Save the network visualization as an HTML file
+network %>% visSave("ppinetwork.html")
+``` 
+8. Calculate Node Degree:
+`degree(g)`: Calculates the degree (number of connections) for each node in the graph.
+```{r}
+# Calculate node degree
+degree_values <- degree(g)
+```
+9. `data.frame(degree = degree_values)`: Creates a data frame for the degree values.
+`ggplot(degree_distribution, aes(x = degree)) + geom_histogram(binwidth = 1, fill = 'darkblue', color = 'black') + labs(title = "Degree Distribution", x = "Degree", y = "Frequency")`: Plots the degree distribution using ggplot2 with a histogram, and customizes the plot with titles and labels.
+`ggsave("degree_distribution.png", plot = degree_plot, width = 10, height = 7, dpi = 300)`: Saves the degree distribution plot as a PNG file with specified dimensions and resolution.
+```{r}
+# Plot degree distribution
+degree_distribution <- data.frame(degree = degree_values)
+degree_plot <- ggplot(degree_distribution, aes(x = degree)) +
+  geom_histogram(binwidth = 1, fill = 'darkblue', color = 'black') +
+  labs(title = "Degree Distribution", x = "Degree", y = "Frequency")
+degree_plot
+
+# Save degree distribution plot
+ggsave("degree_distribution.png", plot = degree_plot, width = 10, height = 7, dpi = 300)
+```
+10. Normalize Node Sizes Based on Degree:
+Define the minimum (`min_size = 10`) and maximum (`max_size = 50`) node sizes.
+Normalize the node sizes based on their degree values.
+Update the nodes data frame (`nodes_degree`) with the normalized sizes.
+```{r}
+# Normalize node sizes based on degree
+min_size <- 10
+max_size <- 50
+normalized_degree_sizes <- min_size + (degree_values - min(degree_values)) / (max(degree_values) - min(degree_values)) * (max_size - min_size)
+nodes_degree <- nodes
+nodes_degree$size <- normalized_degree_sizes
+```
+11. Visualize Network with Node Sizes Based on Degree:
+visNetwork(nodes_degree, edges): Initializes the network visualization with nodes sized by normalized degree values.
+visEdges(smooth = FALSE): Disables smooth edges.
+visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE): Enables options for highlighting the nearest nodes and selecting nodes by ID.
+visPhysics(solver = "barnesHut", stabilization = list(enabled = TRUE, iterations = 1000)): Applies physics settings using the Barnes-Hut solver for layout stabilization.
+visInteraction(dragNodes = TRUE, dragView = TRUE, zoomView = TRUE): Enables interaction options like dragging nodes and zooming.
+visEvents(stabilizationIterationsDone = "function () {this.setOptions({physics: false});}"): Disables physics after stabilization iterations are done.
+```{r}
+# Create and display the interactive network with nodes sized by normalized degree
+node_degree_network <- visNetwork(nodes_degree, edges, width = "100%", height = "800px") %>%
+  visEdges(smooth = FALSE) %>%
+  visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE) %>%
+  visPhysics(solver = "barnesHut", stabilization = list(enabled = TRUE, iterations = 1000)) %>%
+  visInteraction(dragNodes = TRUE, dragView = TRUE, zoomView = TRUE) %>%
+  visEvents(stabilizationIterationsDone = "function () {this.setOptions({physics: false});}")
+
+# Display the updated network in the viewer
+node_degree_network
+
+# Save the updated network visualization as an HTML file
+node_degree_network %>% visSave("network_degree.html")
+```
+12. Print Top 10 Nodes by Degree:
+`head(sort(degree_values, decreasing = TRUE), 10)`: Gets the top 10 nodes with the highest degree.
+`cat("Top 10 nodes by degree:\n")`: Prints a header.
+`print(top_degree_nodes)`: Prints the top 10 nodes by degree.
+```{r}
+# Print top 10 nodes by degree
+top_degree_nodes <- head(sort(degree_values, decreasing = TRUE), 10)
+cat("Top 10 nodes by degree:\n")
+print(top_degree_nodes)
+```
+13. Calculate Betweenness Centrality:
+betweenness(g): Calculates the betweenness centrality for each node in the graph.
+```{r}
+# Calculate betweenness centrality
+betweenness_values <- betweenness(g)
+
+# Plot betweenness centrality distribution
+betweenness_distribution <- data.frame(betweenness = betweenness_values)
+betweenness_plot <- ggplot(betweenness_distribution, aes(x = betweenness)) +
+  geom_histogram(binwidth = 1, fill = 'darkblue', color = 'black') +
+  labs(title = "Betweenness Centrality Distribution", x = "Betweenness Centrality", y = "Frequency")
+betweenness_plot
+
+# Save betweenness centrality distribution plot
+ggsave("betweenness_distribution.png", plot = betweenness_plot, width = 10, height = 7, dpi = 300)
+
+# Normalize node sizes based on betweenness centrality
+normalized_betweenness_sizes <- min_size + (betweenness_values - min(betweenness_values)) / (max(betweenness_values) - min(betweenness_values)) * (max_size - min_size)
+nodes_betweenness <- nodes
+nodes_betweenness$size <- normalized_betweenness_sizes
+
+# Create and display the interactive network with nodes sized by normalized betweenness centrality
+betweenness_centrality_network <- visNetwork(nodes_betweenness, edges, width = "100%", height = "800px") %>%
+  visEdges(smooth = FALSE) %>%
+  visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE) %>%
+  visPhysics(solver = "barnesHut", stabilization = list(enabled = TRUE, iterations = 1000)) %>%
+  visInteraction(dragNodes = TRUE, dragView = TRUE, zoomView = TRUE) %>%
+  visEvents(stabilizationIterationsDone = "function () {this.setOptions({physics: false});}")
+
+# Display the updated network in the viewer
+betweenness_centrality_network
+
+# Save the updated network visualization as an HTML file
+betweenness_centrality_network %>% visSave("network_betweenness.html")
+```
+14. Print Top 10 Nodes by Betweenness Centrality
+```{r}
+top_betweenness_nodes <- head(sort(betweenness_values, decreasing = TRUE), 10)
+cat("Top 10 nodes by betweenness centrality:\n")
+print(top_betweenness_nodes)
+```
+15. Calculate Closeness Centrality:
+```{r}
+# Calculate closeness centrality
+closeness_values <- closeness(g)
+
+
+# Normalize node sizes based on closeness centrality
+normalized_closeness_sizes <- min_size + (closeness_values - min(closeness_values)) / (max(closeness_values) - min(closeness_values)) * (max_size - min_size)
+nodes_closeness <- nodes
+nodes_closeness$size <- normalized_closeness_sizes
+
+# Create and display the interactive network with nodes sized by normalized closeness centrality
+closeness_centrality_network <- visNetwork(nodes_closeness, edges, width = "100%", height = "800px") %>%
+  visEdges(smooth = FALSE) %>%
+  visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE) %>%
+  visPhysics(solver = "barnesHut", stabilization = list(enabled = TRUE, iterations = 1000)) %>%
+  visInteraction(dragNodes = TRUE, dragView = TRUE, zoomView = TRUE) %>%
+  visEvents(stabilizationIterationsDone = "function () {this.setOptions({physics: false});}")
+
+# Display the updated network in the viewer
+closeness_centrality_network
+
+# Save the updated network visualization as an HTML file
+closeness_centrality_network %>% visSave("network_closeness.html")
+```
+16. Print Top 10 Nodes by Closeness Centrality:
+```{r}
+top_closeness_nodes <- head(sort(closeness_values, decreasing = TRUE), 10)
+cat("Top 10 nodes by closeness centrality:\n")
+print(top_closeness_nodes)
+```
+17. Detect Communities Using the Louvain Method:
+
+`cluster_louvain(g)`: Detects communities in the graph using the Louvain method.
+`membership(community)`: Extracts the community membership for each node.
+Assign Community Colors to Nodes:
+
+Generate a color palette for the communities using `rcartocolor::carto_pal`.
+Assign colors to the nodes based on their community membership.
+
+Visualize Network with Nodes Colored by Community Membership:
+
+`visNetwork(nodes_communities, edges)`: Initializes the network visualization with nodes colored by community membership.
+```{r}
+# Detect communities using the Louvain method
+community <- cluster_louvain(g)
+membership <- membership(community)
+
+# Assign community colors to nodes
+num_communities <- length(unique(membership))
+community_palette <- rcartocolor::carto_pal(n = num_communities, name = "DarkMint")
+nodes_communities <- nodes
+nodes_communities$color <- community_palette[membership]
+
+# Create and display the interactive network with nodes colored by community membership
+community_network <- visNetwork(nodes_communities, edges, width = "100%", height = "800px") %>%
+  visEdges(smooth = FALSE) %>%
+  visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE) %>%
+  visPhysics(solver = "barnesHut", stabilization = list(enabled = TRUE, iterations = 1000)) %>%
+  visInteraction(dragNodes = TRUE, dragView = TRUE, zoomView = TRUE) %>%
+  visEvents(stabilizationIterationsDone = "function () {this.setOptions({physics: false});}")
+
+# Display the network with communities in the viewer
+community_network
+
+# Save the community network visualization as an HTML file
+community_network %>% visSave("network_communities.html")
+```
+
