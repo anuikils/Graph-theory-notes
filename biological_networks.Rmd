@@ -119,6 +119,51 @@ visNetwork(nodes_vis, edges_vis) %>%
   visInteraction(zoomView = TRUE) %>%
   visPhysics(stabilization = FALSE)
 ```
+```{r}
+# Generate simulated data
+set.seed(42)  # For reproducibility
+data <- matrix(rnorm(100), nrow = 10)  # 10 observations, 10 variables
+
+# Create correlation matrix
+correlation_matrix <- cor(data)
+print(correlation_matrix)
+```
+
+```{r}
+# Define a threshold
+threshold <- 0.5  # Only include correlations greater than |0.5|
+
+# Create adjacency matrix
+adjacency_matrix <- ifelse(abs(correlation_matrix) > threshold, 1, 0)
+diag(adjacency_matrix) <- 0  # Ensure no self-loops
+print(adjacency_matrix)
+```
+
+```{r}
+# Load igraph for graph manipulation
+library(igraph)
+
+# Convert adjacency matrix to edge list
+edge_list <- as.data.frame(as_edgelist(graph_from_adjacency_matrix(adjacency_matrix)))
+colnames(edge_list) <- c("from", "to")
+print(edge_list)
+```
+```{r}
+# Create a data frame of nodes
+nodes <- data.frame(id = 1:ncol(adjacency_matrix),
+                    label = paste("Var", 1:ncol(adjacency_matrix), sep = ""),
+                    group = sample(1:2, ncol(adjacency_matrix), replace = TRUE))  # Optional grouping
+print(nodes)
+```
+```{r}
+# Load visNetwork package
+library(visNetwork)
+
+# Visualize the network
+visNetwork(nodes, edge_list) %>%
+  visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE) %>%
+  visLayout(randomSeed = 22)  # For reproducibility
+```
 1. **Degree**:
     - **What it is**: The degree of a node is the number of connections (or edges) it has with other nodes.
     - **Why it's used**: In a protein-protein interaction (PPI) network, the degree can indicate how many interactions a protein has with other proteins. Proteins with a high degree may be crucial for the stability and functionality of the network because they interact with many other proteins.
@@ -343,6 +388,49 @@ top_closeness_nodes <- head(sort(closeness_values, decreasing = TRUE), 10)
 cat("Top 10 nodes by closeness centrality:\n")
 print(top_closeness_nodes)
 ```
+```{r}
+# Calculate eigenvector centrality
+eigenvector_values <- eigen_centrality(g)$vector
+
+# Normalize node sizes based on eigenvector centrality
+normalized_eigenvector_sizes <- min_size + (eigenvector_values - min(eigenvector_values)) / 
+  (max(eigenvector_values) - min(eigenvector_values)) * (max_size - min_size)
+nodes_eigenvector <- nodes
+nodes_eigenvector$size <- normalized_eigenvector_sizes
+
+# Create and display the interactive network with nodes sized by normalized eigenvector centrality
+eigenvector_centrality_network <- visNetwork(nodes_eigenvector, edges, width = "100%", height = "800px") %>%
+  visEdges(smooth = FALSE) %>%
+  visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE) %>%
+  visPhysics(solver = "barnesHut", stabilization = list(enabled = TRUE, iterations = 1000)) %>%
+  visInteraction(dragNodes = TRUE, dragView = TRUE, zoomView = TRUE) %>%
+  visEvents(stabilizationIterationsDone = "function () {this.setOptions({physics: false});}")
+
+# Display the updated network in the viewer
+eigenvector_centrality_network
+
+```
+```{r}
+# Calculate clustering coefficient
+clustering_values <- transitivity(g, type = "local", isolates = "zero")
+
+# Normalize node sizes based on clustering coefficient
+normalized_clustering_sizes <- min_size + (clustering_values - min(clustering_values)) / 
+  (max(clustering_values) - min(clustering_values)) * (max_size - min_size)
+nodes_clustering <- nodes
+nodes_clustering$size <- normalized_clustering_sizes
+
+# Create and display the interactive network with nodes sized by normalized clustering coefficient
+clustering_coefficient_network <- visNetwork(nodes_clustering, edges, width = "100%", height = "800px") %>%
+  visEdges(smooth = FALSE) %>%
+  visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE) %>%
+  visPhysics(solver = "barnesHut", stabilization = list(enabled = TRUE, iterations = 1000)) %>%
+  visInteraction(dragNodes = TRUE, dragView = TRUE, zoomView = TRUE) %>%
+  visEvents(stabilizationIterationsDone = "function () {this.setOptions({physics: false});}")
+
+# Display the updated network in the viewer
+clustering_coefficient_network
+```
 17. Detect Communities Using the Louvain Method:
 
 `cluster_louvain(g)`: Detects communities in the graph using the Louvain method.
@@ -355,6 +443,8 @@ Assign colors to the nodes based on their community membership.
 Visualize Network with Nodes Colored by Community Membership:
 
 `visNetwork(nodes_communities, edges)`: Initializes the network visualization with nodes colored by community membership.
+
+
 ```{r}
 # Detect communities using the Louvain method
 community <- cluster_louvain(g)
